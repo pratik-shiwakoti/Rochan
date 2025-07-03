@@ -20,25 +20,29 @@
 
   <script>
   const form = document.getElementById('blogForm');
-  const titleInput = document.getElementById('title');
-  const contentInput = document.getElementById('content');
-  const blogList = document.getElementById('blogList');
+const titleInput = document.getElementById('title');
+const contentInput = document.getElementById('content');
+const blogList = document.getElementById('blogList');
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
+let blogs = JSON.parse(localStorage.getItem('blogs')) || [];
 
-    const title = titleInput.value.trim();
-    const content = contentInput.value.trim();
-    if (!title || !content) return;
+function saveBlogs() {
+  localStorage.setItem('blogs', JSON.stringify(blogs));
+}
 
-    // Create new blog card
+function renderBlogs() {
+  blogList.innerHTML = '';
+
+  blogs.forEach((blog, index) => {
     const blogCard = document.createElement('div');
     blogCard.className = 'blog-card';
     blogCard.innerHTML = `
-      <h3>${title}</h3>
-      <p>${content}</p>
+      <h3>${blog.title}</h3>
+      <p>${blog.content}</p>
       <div class="actions">
-        <button class="like-btn">👍 Like (<span class="like-count">0</span>)</button>
+        <button class="like-btn">👍 Like (<span class="like-count">${blog.likes}</span>)</button>
+        <button class="dislike-btn">👎 Dislike (<span class="dislike-count">${blog.dislikes}</span>)</button>
+        <button class="delete-btn">🗑️ Delete</button>
       </div>
       <div class="comment-section">
         <input type="text" placeholder="Write a comment..." class="comment-input" />
@@ -47,36 +51,89 @@
       </div>
     `;
 
-    blogList.prepend(blogCard);
-    form.reset();
+    // Show existing comments
+    const commentList = blogCard.querySelector('.comment-list');
+    blog.comments.forEach(comment => {
+      const commentDiv = document.createElement('div');
+      commentDiv.className = 'comment';
+      commentDiv.textContent = comment;
+      commentList.appendChild(commentDiv);
+    });
 
-    // Like button functionality
+    // Like functionality
     const likeBtn = blogCard.querySelector('.like-btn');
     const likeCount = blogCard.querySelector('.like-count');
-    let likes = 0;
-
     likeBtn.addEventListener('click', () => {
-      likes++;
-      likeCount.textContent = likes;
+      blogs[index].likes++;
+      likeCount.textContent = blogs[index].likes;
+      saveBlogs();
+    });
+
+    // Dislike functionality
+    const dislikeBtn = blogCard.querySelector('.dislike-btn');
+    const dislikeCount = blogCard.querySelector('.dislike-count');
+    dislikeBtn.addEventListener('click', () => {
+      blogs[index].dislikes++;
+      dislikeCount.textContent = blogs[index].dislikes;
+      saveBlogs();
+    });
+
+    // Delete functionality
+    const deleteBtn = blogCard.querySelector('.delete-btn');
+    deleteBtn.addEventListener('click', () => {
+      if (confirm("Are you sure you want to delete this blog?")) {
+        blogs.splice(index, 1);
+        saveBlogs();
+        renderBlogs();
+      }
     });
 
     // Comment functionality
-    const commentBtn = blogCard.querySelector('.comment-btn');
     const commentInput = blogCard.querySelector('.comment-input');
-    const commentList = blogCard.querySelector('.comment-list');
+    const commentBtn = blogCard.querySelector('.comment-btn');
 
     commentBtn.addEventListener('click', () => {
       const commentText = commentInput.value.trim();
       if (commentText) {
+        blogs[index].comments.push(commentText);
         const commentDiv = document.createElement('div');
         commentDiv.className = 'comment';
         commentDiv.textContent = commentText;
         commentList.appendChild(commentDiv);
         commentInput.value = '';
+        saveBlogs();
       }
     });
+
+    blogList.prepend(blogCard);
   });
+}
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  const title = titleInput.value.trim();
+  const content = contentInput.value.trim();
+  if (!title || !content) return;
+
+  const newBlog = {
+    title,
+    content,
+    likes: 0,
+    dislikes: 0,
+    comments: []
+  };
+
+  blogs.push(newBlog);
+  saveBlogs();
+  form.reset();
+  renderBlogs();
+});
+
+// Load blogs on page load
+renderBlogs();
+
 </script>
+
 
 </body>
 </html>
