@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rochan's Blog Data</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Blog Entries</h1>
+    <form id="blogForm">
+      <input type="text" id="title" placeholder="Enter blog title" required />
+      <textarea id="content" rows="4" placeholder="Write your blog content..." required></textarea>
+      <button type="submit" class="button">Add Blog</button>
+    </form>
+    <div id="blogList"></div>
+    <a href="index.html" class="button">Back to Home</a>
+  </div>
+
+  <script>
+  const form = document.getElementById('blogForm');
+  const titleInput = document.getElementById('title');
+  const contentInput = document.getElementById('content');
+  const blogList = document.getElementById('blogList');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const title = titleInput.value.trim();
+    const content = contentInput.value.trim();
+    if (!title || !content) return;
+
+    // Create new blog card
+    const blogCard = document.createElement('div');
+    blogCard.className = 'blog-card';
+    blogCard.innerHTML = `
+      <h3>${title}</h3>
+      <p>${content}</p>
+      <div class="actions">
+        <button class="like-btn">👍 Like (<span class="like-count">0</span>)</button>
+      </div>
+      <div class="comment-section">
+        <input type="text" placeholder="Write a comment..." class="comment-input" />
+        <button class="comment-btn">💬 Comment</button>
+        <div class="comment-list"></div>
+      </div>
+    `;
+
+    blogList.prepend(blogCard);
+    form.reset();
+
+    // Like button functionality
+    const likeBtn = blogCard.querySelector('.like-btn');
+    const likeCount = blogCard.querySelector('.like-count');
+    let likes = 0;
+
+    likeBtn.addEventListener('click', () => {
+      likes++;
+      likeCount.textContent = likes;
+    });
+
+    // Comment functionality
+    const commentBtn = blogCard.querySelector('.comment-btn');
+    const commentInput = blogCard.querySelector('.comment-input');
+    const commentList = blogCard.querySelector('.comment-list');
+
+    commentBtn.addEventListener('click', () => {
+      const commentText = commentInput.value.trim();
+      if (commentText) {
+        const commentDiv = document.createElement('div');
+        commentDiv.className = 'comment';
+        commentDiv.textContent = commentText;
+        commentList.appendChild(commentDiv);
+        commentInput.value = '';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
