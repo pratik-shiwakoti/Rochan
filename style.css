@@ -1,3 +1,4 @@
+/* Base Styles */
 body {
   font-family: Arial, sans-serif;
   background-color: #eafae3;
@@ -23,7 +24,9 @@ h1 {
   margin-bottom: 1em;
 }
 
-input, textarea {
+/* Form Inputs */
+input,
+textarea {
   width: 100%;
   padding: 0.8em;
   margin-top: 1em;
@@ -34,6 +37,7 @@ input, textarea {
   background-color: #ffffff;
 }
 
+/* Primary Button (Submit, Back) */
 .button {
   display: inline-block;
   margin-top: 1em;
@@ -53,6 +57,7 @@ input, textarea {
   background-color: #5fae5f;
 }
 
+/* Blog Card */
 .blog-card {
   background-color: #e1f7dc;
   border: 1px solid #c4eac1;
@@ -67,44 +72,50 @@ input, textarea {
   font-size: 1.2em;
 }
 
+/* Action Buttons */
 .actions {
   margin-top: 0.8em;
 }
 
 .actions button {
-  margin-right: 0.5em;
-  padding: 0.4em 0.8em;
-  font-size: 0.9em;
-  background-color: #95d795;
+  margin: 0.3em 0.3em 0.3em 0;
+  padding: 0.4em 1em;
+  font-size: 0.95em;
   border: none;
   border-radius: 0.4em;
   cursor: pointer;
 }
 
-.actions button:hover {
-  background-color: #78c178;
+/* Specific Buttons */
+.like-btn {
+  background-color: #d8f9d2;
+  border: 1px solid #a6e6a6;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-  .container {
-    padding: 1em;
-  }
-
-  h1 {
-    font-size: 1.5em;
-  }
-
-  .button,
-  .actions button {
-    font-size: 0.9em;
-    padding: 0.6em 1em;
-  }
-
-  input, textarea {
-    font-size: 0.95em;
-  }
+.dislike-btn {
+  background-color: #ffe4e4;
+  border: 1px solid #f0a7a7;
 }
+
+.delete-btn {
+  background-color: #ffd3b3;
+  border: 1px solid #f09c6d;
+}
+
+/* Hover Effects */
+.like-btn:hover {
+  background-color: #c5f1bd;
+}
+
+.dislike-btn:hover {
+  background-color: #ffc9c9;
+}
+
+.delete-btn:hover {
+  background-color: #ffbd91;
+}
+
+/* Comment Section */
 .comment-section {
   margin-top: 1em;
 }
@@ -143,15 +154,26 @@ input, textarea {
   border-radius: 0.3em;
 }
 
-.like-btn {
-  background-color: #e7f9e6;
-  color: #2e5939;
-  border: 1px solid #a0dca0;
-  border-radius: 0.4em;
-  padding: 0.4em 1em;
-  cursor: pointer;
-}
+/* Responsive Design */
+@media (max-width: 600px) {
+  .container {
+    padding: 1em;
+  }
 
-.like-btn:hover {
-  background-color: #d3f3d2;
+  h1 {
+    font-size: 1.5em;
+  }
+
+  .button,
+  .actions button,
+  .comment-btn {
+    font-size: 0.9em;
+    padding: 0.6em 1em;
+  }
+
+  input,
+  textarea,
+  .comment-input {
+    font-size: 0.95em;
+  }
 }
